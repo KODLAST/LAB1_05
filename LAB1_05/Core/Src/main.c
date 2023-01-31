@@ -56,7 +56,7 @@ GPIO_PIN_6 }, { GPIOA, GPIO_PIN_7 }, };
 uint16_t ButtonMatrix = 0;
 uint16_t ButtonMatrix_L = 0;
 int16_t Test = 0;
-
+static int state = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -107,55 +107,150 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
-		static int state = 0;
+
 		static uint32_t timestamp = 0;
 		if (HAL_GetTick() >= timestamp) {
 			timestamp = HAL_GetTick() + 10;
 			ReadMatrixButton_1Row();
 		}
 		if (ButtonMatrix_L != ButtonMatrix && ButtonMatrix != 0) {
+			Test = state;
 			switch (state) {
 			default:
-			Test = state;
 			case 0:
-				if (ButtonMatrix == 8) {
+				if(state == 0){
 
-					state = 1;
 				}
-
-				else if (ButtonMatrix > 0) {
-					state = 5;
+				if (ButtonMatrix == 512) {
+					state = 1;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
 				}
 				break;
 			case 1:
-				if (ButtonMatrix == 32) {
+				if (ButtonMatrix == 2) {
 					state = 2;
 				} else if (ButtonMatrix == 4096) {
 					state = 0;
 				} else if (ButtonMatrix > 0) {
-					state = 5;
+					state = 13;
 				}
 				break;
 			case 2:
-				if (ButtonMatrix == 32768) {
+				if (ButtonMatrix == 1024) {
 					state = 3;
 				} else if (ButtonMatrix == 4096) {
 					state = 0;
 				} else if (ButtonMatrix > 0) {
-					state = 5;
+					state = 13;
 				}
 				break;
 			case 3:
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+				if (ButtonMatrix == 2) {
+					state = 4;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 4:
+				if (ButtonMatrix == 8) {
+					state = 5;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 5:
+				if (ButtonMatrix == 32) {
+					state = 6;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 6:
+				if (ButtonMatrix == 8) {
+					state = 7;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 7:
+				if (ButtonMatrix == 8) {
+					state = 8;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 8:
+				if (ButtonMatrix == 8) {
+					state = 9;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 9:
+				if (ButtonMatrix == 8) {
+					state = 10;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 10:
+				if (ButtonMatrix == 32) {
+					state = 11;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 11:
+				if (ButtonMatrix == 32768) {
+					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+					state = 12;
+				} else if (ButtonMatrix == 4096) {
+					state = 0;
+				} else if (ButtonMatrix > 0) {
+					state = 13;
+				}
+				break;
+			case 12:
+				if (state == 12) {
 
+				}
+				if (ButtonMatrix == 4096) {
+					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5 , GPIO_PIN_RESET);
+					state = 0;
+				}
+				break;
+			case 13:
+				if (ButtonMatrix == 4096) {
+					state = 0;
+				}
+				break;
 			}
 		}
 
 		ButtonMatrix_L = ButtonMatrix;
 	}
-		/* USER CODE END WHILE */
+	/* USER CODE END WHILE */
 
-		/* USER CODE BEGIN 3 */
+	/* USER CODE BEGIN 3 */
 
 	/* USER CODE END 3 */
 }
