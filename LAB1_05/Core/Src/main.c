@@ -55,7 +55,7 @@ PortPin L[4] = { { GPIOA, GPIO_PIN_9 }, { GPIOC, GPIO_PIN_7 }, { GPIOB,
 GPIO_PIN_6 }, { GPIOA, GPIO_PIN_7 }, };
 uint16_t ButtonMatrix = 0;
 uint16_t ButtonMatrix_L = 0;
-int16_t test = 0;
+int16_t Test = 0;
 
 /* USER CODE END PV */
 
@@ -107,7 +107,7 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
-		int state = 0;
+		static int state = 0;
 		static uint32_t timestamp = 0;
 		if (HAL_GetTick() >= timestamp) {
 			timestamp = HAL_GetTick() + 10;
@@ -116,8 +116,8 @@ int main(void) {
 		if (ButtonMatrix_L != ButtonMatrix && ButtonMatrix != 0) {
 			switch (state) {
 			default:
+			Test = state;
 			case 0:
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 				if (ButtonMatrix == 8) {
 
 					state = 1;
@@ -146,7 +146,7 @@ int main(void) {
 				}
 				break;
 			case 3:
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 
 			}
 		}
